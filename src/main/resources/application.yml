@@ -1,4 +1,30 @@
 spring:
+  cloud:
+    function:
+      definition: scheduleEventConsumer;reCurringScheduleConsumer;scheduleEventProducer;reCurringScheduleProducer;
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+          auto-create-topics: true
+      bindings:
+        scheduleEventProducer-out-0:
+          destination: scheduleCommand
+        scheduleEventConsumer-in-0:
+          destination: scheduleCommand
+          group: mygroup
+          consumer:
+            configuration:
+              auto.offset.reset: latest
+        reCurringScheduleProducer-out-0:
+          destination: reCurringScheduleCommand
+        reCurringScheduleConsumer-in-0:
+          destination: reCurringScheduleCommand
+          group: mygroup
+          consumer:
+            configuration:
+              auto.offset.reset: latest
+
   r2dbc:
     url: r2dbc:mysql://localhost:15599/object_cqrs?useSSL=false&allowPublicKeyRetrieval=true
     username: user
