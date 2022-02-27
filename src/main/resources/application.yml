@@ -1,0 +1,12 @@
+spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost:15599/object_cqrs?useSSL=false&allowPublicKeyRetrieval=true
+    username: user
+    password: 1234
+
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
+#    dev.miku.r2dbc.mysql.client.ReactorNettyClient: TRACE
+#    dev.miku.r2dbc.mysql.message.client.TextQueryMessage: DEBUG
