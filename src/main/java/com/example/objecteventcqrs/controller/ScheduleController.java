@@ -1,8 +1,10 @@
 package com.example.objecteventcqrs.controller;
 
+import com.example.objecteventcqrs.controller.dtos.ScheduleEventDto;
 import com.example.objecteventcqrs.domain.RecurringSchedule;
 import com.example.objecteventcqrs.domain.ScheduleEvent;
-import com.example.objecteventcqrs.service.ScheduleService;
+import com.example.objecteventcqrs.service.ScheduleCommandService;
+import com.example.objecteventcqrs.service.ScheduleQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,11 +17,12 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor
 public class ScheduleController {
-    private final ScheduleService scheduleService;
+    private final ScheduleQueryService scheduleQueryService;
+    private final ScheduleCommandService scheduleCommandService;
 
     @PostMapping("/schedule")
     public Mono<ScheduleEvent> createEvent(@RequestBody ScheduleEventDto eventDto){
-        return this.scheduleService.createEvent(new ScheduleEvent(
+        return this.scheduleCommandService.createEvent(new ScheduleEvent(
             null,
             eventDto.getSubject(),
             eventDto.getFrom(),
@@ -29,17 +32,17 @@ public class ScheduleController {
 
     @GetMapping("/schedule/{eventId}")
     public Mono<ScheduleEvent> findSchedule(@PathVariable("eventId") Long eventId) {
-        return this.scheduleService.findSchedule(eventId);
+        return this.scheduleQueryService.findSchedule(eventId);
     }
 
     @PutMapping("/schedule")
     public Mono<ScheduleEvent> reschedule(@RequestBody RecurringSchedule schedule) {
-        return this.scheduleService.reschedule(schedule);
+        return this.scheduleCommandService.reschedule(schedule);
     }
 
     @PostMapping("/schedule/satisfaction")
     public Mono<Boolean> isSatisfied(@RequestBody RecurringSchedule schedule) {
         System.out.println("dayofweek => " + schedule.getDayOfWeek());
-        return this.scheduleService.isSatisfied(schedule);
+        return this.scheduleQueryService.isSatisfied(schedule);
     }
 }

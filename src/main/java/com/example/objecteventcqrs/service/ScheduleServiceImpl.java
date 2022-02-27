@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ScheduleServiceImpl implements ScheduleService{
+public class ScheduleServiceImpl implements ScheduleQueryService, ScheduleCommandService{
 
     private final ScheduleStore scheduleStore;
 
